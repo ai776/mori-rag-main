@@ -1,11 +1,11 @@
-# yamamoto-rag-x
+# mori-rag
 
-山本さんの RAG（`insights/`）と X（Twitter）リサーチを組み合わせ、**長文 X 記事** または **YouTube 台本（30分＋Shorts3本）** を生成する [Claude Code](https://claude.ai/claude-code) 用プロジェクトです。
+森崇氏の米国株レポート RAG（`insights/`）と X（Twitter）リサーチを組み合わせ、**長文 X 記事** または **YouTube 台本（30分＋Shorts3本）** を生成する [Claude Code](https://claude.ai/claude-code) 用プロジェクトです。
 
 | 用途 | スキル定義（正本） |
 |------|---------------------|
-| X「記事」向け長文 | `.claude/skills/yamamoto-x-post/SKILL.md` |
-| YouTube 台本 | `.claude/skills/yamamoto-yt-script/SKILL.md` |
+| X「記事」向け長文 | `.claude/skills/mori-x-post/SKILL.md` |
+| YouTube 台本 | `.claude/skills/mori-yt-script/SKILL.md` |
 
 手順・プロンプト・パスは各 `SKILL.md` を優先してください。こちらの README は概要と X API セットアップです。
 
@@ -13,19 +13,19 @@
 
 ## 機能（ワークフロー概要）
 
-### X 記事（`yamamoto-x-post`）
+### X 記事（`mori-x-post`）
 
 1. テーマ受け取り → X リサーチ ON/OFF、X API の有無を確認  
 2. X でリサーチ（任意）→ WebSearch → Nitter → X API のフォールバック  
 3. 記事構成の整理（リサーチ OFF ならスキップ可）  
-4. **RAG** … **`insights/_routing.md` を先に読み**、主カテゴリ1・補助0〜1で仕訳し、優先ファイル 5〜8 件を読む。足りなければ `insights/*.txt` を Grep  
+4. **RAG** … `insights/` 配下の `.md` ファイル一覧から、テーマに関連するレポートを 5〜8 件選んで Read。足りなければ `insights/*.md` を Grep で補強  
 5. 長文 **1 本**を生成 → 確定後、`articles/` に保存  
 
-### YouTube 台本（`yamamoto-yt-script`）
+### YouTube 台本（`mori-yt-script`）
 
 1〜3 は記事スキルと同様の流れ（台本構成ステップあり）。  
-4. RAG は同じく **`_routing.md` 優先** 。本編に反映する具体事例は **2〜3 件**、Shorts はその事例の別角度での使い回し。  
-5. `insights/video_prompt/Louis Gleeson氏プロンプト.md` を読み込み、台本を生成 → **`scripts/` に通常版**、続けて **`scripts_tts/` に TTS 用**（読み上げクレンジング済み）を自動保存（各 `SKILL.md` ステップ⑤・⑥）。  
+4. RAG は `insights/` から同様にレポートを集め、本編に反映する具体事例は **2〜3 件**、Shorts はその事例の別角度での使い回し。  
+5. `insights/video_prompt/Louis Gleeson氏プロンプト.md`（旧 `260428_yamamoto-rag-x-main/insights/video_prompt/`）を読み込み、台本を生成 → **`scripts/` に通常版**、続けて **`scripts_tts/` に TTS 用**（読み上げクレンジング済み）を自動保存（各 `SKILL.md` ステップ⑤・⑥）。  
 
 X 記事の途中から **「YouTube台本も作る」** で続けると、リサーチ・RAG を引き継いで台本ステップに進めます（各 SKILL の説明どおり）。
 
@@ -47,21 +47,20 @@ X 記事の途中から **「YouTube台本も作る」** で続けると、リ�
 ## プロジェクト構成（現状）
 
 ```
-yamamoto-rag-x/
+mori-rag/
 ├── README.md
 ├── articles/                    ← 生成した X 記事
 ├── scripts/                     ← 生成した YouTube 台本（通常版）
 ├── scripts_tts/                 ← TTS 用クレンジング済み台本（スキルが自動出力）
-├── insights/
-│   ├── _routing.md              ← RAG 仕訳（grep より先に必ず読む）
-│   ├── video_prompt/            ← 台本用プロンプト（Louis Gleeson）
-│   └── *_analysis.txt           ← RAG 用分析テキスト（約 50 本）
+├── insights/                   ← 森崇氏の米国株レポート（RAG ソース）
+│   ├── *.md                     ← 正本（Read 対象）
+│   └── *.pdf                    ← 元データ（参考。スキルは md を優先）
 └── .claude/skills/
-    ├── yamamoto-x-post/SKILL.md
-    └── yamamoto-yt-script/SKILL.md
+    ├── mori-x-post/SKILL.md
+    └── mori-yt-script/SKILL.md
 ```
 
-**運用上の整理:** 以前の `insights/_used/`（採用履歴）は廃止済みです。リポジトリ側で「使用済み」管理はしません。
+YouTube 台本プロンプトファイル（`Louis Gleeson氏プロンプト.md`）は旧プロジェクト（`260428_yamamoto-rag-x-main/insights/video_prompt/`）を参照しています。台本の作り方は変更しない方針です。
 
 ---
 
@@ -69,13 +68,12 @@ yamamoto-rag-x/
 
 | 観点 | ルール |
 |------|--------|
-| 仕訳 | **RAG 検索より先に `insights/_routing.md`** を読み、主カテゴリ1・補助0〜1で絞る |
-| 取得 | 1 テーマあたり **広めに 5〜10 ファイル** 読んでもよい |
+| 取得 | 1 テーマあたり **広めに 5〜10 ファイル** 読んでもよい（`insights/*.md`） |
 | 反映 | X 記事: **1〜2 件** / 台本本編: **2〜3 件**（Shorts は本編事例の使い回し） |
 | 元データ | `insights/` のファイルは移動・削除しない |
-| 再利用 | 同一 `*_analysis.txt` の頻度・切り口はユーザーの指示に従う（リポ側にクールダウンログは持たない） |
+| 再利用 | 同一レポートファイルの頻度・切り口はユーザーの指示に従う（リポ側にクールダウンログは持たない） |
 
-新規の `*_analysis.txt` を増やしたら、**`_routing.md` にカテゴリ・キーワード・優先ファイルを追記**すると選定が安定します。
+新しいレポートを `insights/` に追加すれば、そのまま RAG 候補に含まれます。
 
 ---
 
@@ -97,8 +95,8 @@ yamamoto-rag-x/
 ### 1. リポジトリをクローン
 
 ```bash
-git clone https://github.com/ai776/yamamoto-rag-x2.git
-cd yamamoto-rag-x2
+git clone <repo-url>
+cd 260505_mori-rag-main
 ```
 
 （フォルダ名は任意です。合わせて `.claude/skills/*/SKILL.md` のパスも更新してください。）
@@ -182,7 +180,7 @@ curl -s -H "Authorization: Bearer ${X_API_BEARER_TOKEN}" \
 Claude Code で、テーマと「X 記事を書いて」「YouTube 台本を」などと依頼するとスキルが起動します。
 
 ```
-外注の記事でXの長文を書いて
+アップルの決算速報をテーマにXの長文を書いて
 ```
 
 ---

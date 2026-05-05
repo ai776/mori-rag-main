@@ -1,5 +1,10 @@
+# RAG ソース（ローカルのみ、公開しない）
+insights/
+
+# 生成物（ローカルのみ）
+articles/
+scripts/
+scripts_tts/
+
+# OS
 .DS_Store
-.env
-.env.*
-*.pem
-*.key
