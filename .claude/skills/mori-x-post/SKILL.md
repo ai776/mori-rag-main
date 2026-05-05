@@ -2,7 +2,9 @@
 name: mori-x-post
 description: >-
   森さんRAGデータ（米国株レポート）とX(Twitter)リサーチを組み合わせて、テーマに沿ったX記事（長文投稿）を生成するスキル。
-  Use when the user mentions X記事、X投稿、長文投稿、記事作成、森さん記事、米国株記事、mori article,
+  **ユーザーが明示的に「X記事」「X投稿」「長文投稿」「記事作成」「Twitter記事」等のキーワードで要求したときのみ起動する。**
+  テーマだけを投げてきた場合は mori-yt-script（YouTube台本）を優先し、こちらは起動しないこと。
+  Use ONLY when the user explicitly mentions X記事、X投稿、長文投稿、記事作成、森さん記事、米国株記事、mori article,
   or asks to create X/Twitter long-form articles based on a theme.
 ---
 

@@ -1,10 +1,12 @@
 ---
 name: mori-yt-script
 description: >-
-  森さんRAGデータ（米国株レポート）とX(Twitter)リサーチを組み合わせて、テーマに沿ったYouTube台本（30分構成+Shorts3本）を生成するスキル。
-  Use when the user mentions YouTube台本、YT台本、動画台本、YouTube script、台本作成、森さん台本、米国株台本,
+  森さんRAGデータ（米国株レポート）とX(Twitter)リサーチを組み合わせて、テーマに沿ったYouTube台本（30分構成+Shorts3本）を生成するスキル。**このプロジェクト（mori-rag-main）の既定スキル**。
+  ユーザーが米国株・森さん関連のテーマだけを投げてきた場合（例：「アップルの決算について」「今週の米国株相場」「テスラを分析して」など）は、明示指示がなくてもこのスキルを起動してYouTube台本を生成する。
+  Use when the user mentions YouTube台本、YT台本、動画台本、YouTube script、台本作成、森さん台本、米国株台本、または米国株・銘柄・決算等のテーマだけを投げてきたとき,
   or asks to create YouTube scripts based on a theme.
   Also triggered when continuing from mori-x-post with "YouTube台本も作る".
+  ただしユーザーが明示的に「X記事」「X投稿」「長文投稿」を要求した場合は mori-x-post を優先すること。
 ---
 
 # 森さん YouTube台本生成スキル
